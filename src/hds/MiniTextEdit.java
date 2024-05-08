@@ -53,6 +53,7 @@ public class MiniTextEdit extends JFrame implements ActionListener {
     private JFileChooser jfc; // 文本选择
     private UndoManager um; // 撤销管理类
     private static JTextArea textArea; // 文本区域
+    //public static JTextArea textArea; // 文本区域
     private JScrollPane js; // 滚动条
     private JPanel jp; // 面板对象
     private Toolkit toolKit; // 获取默认工具包。
@@ -61,6 +62,13 @@ public class MiniTextEdit extends JFrame implements ActionListener {
     //private static String path = "D:/"; //文件保存路径设置
     private static String filenameTemp;
 
+    public static JTextArea getTextArea() {
+        return textArea;
+    }
+
+    public static void setTextArea(JTextArea textArea) {
+        MiniTextEdit.textArea = textArea;
+    }
 
     JMenuBar menuBar = new JMenuBar();
     JMenu file = new JMenu("文件(F)"), // 菜单
@@ -86,12 +94,9 @@ public class MiniTextEdit extends JFrame implements ActionListener {
 
     /**
      * MiniEdit 方法定义
-     *
      * 实现记事本初始化
-     *
      **/
     public MiniTextEdit() {
-
 
         jfc = new JFileChooser();
         um = new UndoManager();
@@ -174,17 +179,15 @@ public class MiniTextEdit extends JFrame implements ActionListener {
 
     /**
      * actionPerformed 方法定义
-     *
      * 动作触发实现
-     *
      **/
     public void actionPerformed(ActionEvent e) {
 
         Object eventSource = e.getSource();
         if (eventSource == menuItem[0]) // 新建动作
         {
-            MiniTextEdit note1 = new MiniTextEdit();
-            note1.setVisible(true);
+            MiniTextEdit note = new MiniTextEdit();
+            note.setVisible(true);
         } else if (eventSource == menuItem[1])// 打开动作
         {
             open();
@@ -287,9 +290,9 @@ public class MiniTextEdit extends JFrame implements ActionListener {
             }
         } else if (eventSource == menuItem[17]) // 关于记事本
         {
-            String help = "迷你记事本  版本1.0\n操作系统：WIN \n编译器：eclipse\n版权"
+            String help = "迷你记事本  版本1.0\n操作系统：WIN & Linux \nIDE：IDEA\n版权"
                     + "所有: huangdongsheng\n最终解释权归本人所有，"
-                    + "授权给：\n\nBuild By 黄东升\nQQ:201820186\n" + "\n毕业设计：文本编辑器";
+                    + "授权给：\n\nBuild By 黄东升\nQQ:201820186\n" + "\n文本编辑器";
             JOptionPane
                     .showConfirmDialog(null, help, "关于记事本",
                             JOptionPane.DEFAULT_OPTION,
@@ -299,9 +302,7 @@ public class MiniTextEdit extends JFrame implements ActionListener {
 
     /**
      * open 方法定义
-     *
      * 打开文件
-     *
      **/
     public void open() {
         // fileChooser 是 JFileChooser 的实例
@@ -363,9 +364,7 @@ public class MiniTextEdit extends JFrame implements ActionListener {
 
     /**
      * saveFile 方法定义
-     *
      * 保存文件
-     *
      **/
     private void saveFile() {
         // 从标题栏取得文件名称
@@ -395,9 +394,7 @@ public class MiniTextEdit extends JFrame implements ActionListener {
 
     /**
      * saveFileAs 方法定义
-     *
      * 另存
-     *
      **/
     public void saveFileAs() {
         // 显示文件对话框
@@ -412,7 +409,6 @@ public class MiniTextEdit extends JFrame implements ActionListener {
             setTitle(file.toString());
             try {
                 // 建立文件
-
                 file.createNewFile();
                 // 进行文件保存
                 saveFile();
@@ -420,52 +416,6 @@ public class MiniTextEdit extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(null, e.toString(), "无法建立新文件",
                         JOptionPane.ERROR_MESSAGE);
             }
-        }
-    }
-
-    /**
-     * 主函数
-     *
-     *
-     *
-     **/
-    public static void main(String[] args) {
-
-        MiniTextEdit note = new MiniTextEdit();
-        note.setVisible(true);
-        if (args.length > 0) {// 有指定文件名，传递给打开文件函数加载内容
-            try {
-
-                InputStream in = new FileInputStream(args[0]);
-                BufferedReader buf = new BufferedReader(new InputStreamReader(in, "utf-8"));
-                String lineSeparator = System.getProperty("line.separator");
-                // 读取文件并附加至文字编辑区
-                String text;
-                while ((text = buf.readLine()) != null) {
-                    textArea.append(text);
-                    textArea.append(lineSeparator);
-                }
-                buf.close();
-                in.close();
-            } catch (IOException e) {
-                JOptionPane.showMessageDialog(null, e.toString(), "开启文件失败",
-                        JOptionPane.ERROR_MESSAGE);
-            }
-			/*try {
-				File file = new File(args[0]);
-				FileReader readIn = new FileReader(file);
-				int size = (int) file.length();
-				int charsRead = 0;
-				char[] content = new char[size];
-				while (readIn.ready()) {
-					charsRead += readIn.read(content, charsRead, size
-							- charsRead);
-				}
-				readIn.close();
-				textArea.setText(new String(content, 0, charsRead));
-			} catch (Exception e) {
-				System.out.println("Error opening file!");
-			}*/
         }
     }
 }
